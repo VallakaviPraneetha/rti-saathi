@@ -1,15 +1,24 @@
-import ollama
+from groq import Groq
 import json
+import os
+from dotenv import load_dotenv
 from prompt_templates import get_validation_prompt
 
 def validate_rti_request(grievance: str, api_key: str = None):
     try:
+        load_dotenv()
+        key = os.getenv('GROQ_API_KEY')
+        
+        client = Groq(api_key=key)
         prompt = get_validation_prompt(grievance)
-        response = ollama.chat(
-            model='llama3.1:8b',
-            messages=[{'role': 'user', 'content': prompt}]
+        
+        response = client.chat.completions.create(
+            model='llama-3.1-8b-instant',
+            messages=[{'role': 'user', 'content': prompt}],
+            temperature=0.3
         )
-        text = response['message']['content'].strip()
+        
+        text = response.choices[0].message.content.strip()
         text = text.replace('```json', '').replace('```', '').strip()
         
         result = json.loads(text)

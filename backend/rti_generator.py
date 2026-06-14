@@ -1,4 +1,6 @@
-import ollama
+from groq import Groq
+import os
+from dotenv import load_dotenv
 from datetime import datetime
 from prompt_templates import get_rti_generation_prompt, get_explanation_prompt
 
@@ -12,6 +14,10 @@ def generate_rti_application(
     api_key: str = None
 ):
     try:
+        load_dotenv()
+        key = os.getenv('GROQ_API_KEY')
+        client = Groq(api_key=key)
+
         # Generate RTI application
         prompt = get_rti_generation_prompt(
             name=name,
@@ -22,25 +28,27 @@ def generate_rti_application(
             department=department
         )
 
-        response = ollama.chat(
-            model='llama3.1:8b',
-            messages=[{'role': 'user', 'content': prompt}]
+        response = client.chat.completions.create(
+            model='llama-3.1-8b-instant',
+            messages=[{'role': 'user', 'content': prompt}],
+            temperature=0.3
         )
 
-        rti_text = response['message']['content'].strip()
+        rti_text = response.choices[0].message.content.strip()
 
-        # Replace placeholders with actual values
+        # Replace placeholders
         current_date = datetime.now().strftime("%d %B %Y")
         rti_text = rti_text.replace("[Current Date]", current_date)
         rti_text = rti_text.replace("[Department Address]", f"Office of {department['name']}")
 
         # Generate plain language explanation
         explanation_prompt = get_explanation_prompt(rti_text, language)
-        explanation_response = ollama.chat(
-            model='llama3.1:8b',
-            messages=[{'role': 'user', 'content': explanation_prompt}]
+        explanation_response = client.chat.completions.create(
+            model='llama-3.1-8b-instant',
+            messages=[{'role': 'user', 'content': explanation_prompt}],
+            temperature=0.3
         )
-        explanation = explanation_response['message']['content'].strip()
+        explanation = explanation_response.choices[0].message.content.strip()
 
         return {
             "success": True,
