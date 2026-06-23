@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://localhost:8000'
+const BASE_URL = 'https://rti-saathi-backend.onrender.com'
 
 export const generateRTI = async (formData) => {
   const response = await axios.post(`${BASE_URL}/generate-rti`, {
