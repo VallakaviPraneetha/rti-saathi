@@ -9,7 +9,7 @@ function Home() {
       <section className="bg-gradient-to-br from-primary to-blue-900 text-white py-20 px-4">
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-block bg-secondary/20 text-secondary px-4 py-2 rounded-full text-sm font-medium mb-6">
-            🇮🇳 Every Indian has the Right to Information
+            ✦ Every Indian has the Right to Information
           </div>
           <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
             File RTI Applications <br />
@@ -84,7 +84,7 @@ function Home() {
               </div>
               <div>
                 <h3 className="font-semibold text-primary mb-1">AI Powered Drafting</h3>
-                <p className="text-gray-500 text-sm">Gemini AI understands your grievance and converts it into a legally correct RTI application instantly.</p>
+                <p className="text-gray-500 text-sm">Groq AI understands your grievance and converts it into a legally correct RTI application instantly.</p>
               </div>
             </div>
 
